@@ -143,6 +143,9 @@
         <a class="btn btn-default" href="{{ url_for('.download_pheno', phenocode=phenocode) }}">Download summary statistics</a>
       </span>
       {% endif %}
+      <span class="pull-right" style="margin-left:1em">
+        <a class="btn btn-default" href="{{ url_for('.pheno_filter_page', phenocode=phenocode) }}">Filter Variants</a>
+      </span>
     </div>
 </div>
 <div class="row">
