@@ -99,7 +99,7 @@ setup(
     cffi_modules=['pheweb/load/cffi/ffibuilder.py:ffibuilder'],
     python_requires=">=3.4",
     setup_requires=[
-        'cffi~=1.12',
+        'cffi~=1.14',
         'pytest-runner~=4.4',
     ],
     install_requires=[
@@ -107,22 +107,22 @@ setup(
         'Flask-Compress~=1.4',
         'Flask-Login~=0.4',
         'rauth~=0.7',
-        'pysam~=0.15.2',
+        'pysam~=0.16',
         'marisa-trie~=0.7',
         'intervaltree~=3.0',
         'tqdm~=4.31',
         'openpyxl~=2.6',
-        'scipy~=1.2',
-        'numpy~=1.16',
-        'requests[security]~=2.21',
-        'gunicorn~=19.9',
-        'boltons~=19.1',
+        'scipy~=1.6',
+        'numpy~=1.19',
+        'requests[security]~=2.25',
+        'gunicorn~=20.0',
+        'boltons~=20.2',
         'blist~=1.3',
-        'cffi~=1.12', # in both `setup_requires` and `install_requires` as per <https://github.com/pypa/setuptools/issues/391>
+        'cffi~=1.14', # in both `setup_requires` and `install_requires` as per <https://github.com/pypa/setuptools/issues/391>
         'wget~=3.2',
-        'gevent~=1.4',
+        'gevent~=20.12',
     ],
     tests_require=[
-        'pytest~=4.3',
+        'pytest~=6.2',
     ],
 )
