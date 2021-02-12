@@ -357,6 +357,13 @@ def error_page(message:str):
         message=message
     ), 404
 
+@bp.errorhandler(403)
+def error_page(message:str):
+    return render_template(
+        'error.html',
+        message=message
+    ), 403
+
 # Resist some CSRF attacks
 @bp.after_request
 def apply_caching(response):
