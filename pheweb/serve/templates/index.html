@@ -20,16 +20,12 @@ $(function() { $('.typeahead').focus(); }); // autofocus attribute doesn't work 
 <div class="row">
   <div class="col-xs-10 col-xs-offset-1">
     <div class="jumbotron">
-      <p>Data visualization can be done anonymously.</p>
-       <p>
-    The original data may be subject to rights claimed by third parties, including but not limited to, patents, copyright, or other intellectual property rights. It is the responsibility of users to ensure that their exploitation of the data does not infringe any of the rights of such third parties. The sample size and precision of the data presented should preclude de-identification of any individual subject. However, in using these data, you undertake not to attempt to re-identify individual subjects. The creation of any account and any access and/or use of the summary statistics is subject to additional <a href="http://206.12.92.199/terms/pheweb/terms.html" target="_blank">Terms and Conditions.</a>
-</p>
       {% if not config['USE_WHITELIST'] %}
-      <p>Please register to download the summary statistics. By registering, you agree to our terms and conditions (read complete <a href="http://206.12.92.199/terms/pheweb/terms.html" target="_blank">Terms and Conditions</a>).</p>
+      <p>Please register to view this data.</p>
       <br>
       <p><a class="btn-lg btn-primary" role="button" href="{{ url_for('.login_with_google') }}">Click here register with a Google account</a></p>
       {% else %}
-      <p>Please log in to download this data.</p>
+      <p>Please log in to view this data.</p>
       <br>
       <p><a class="btn-lg btn-primary" role="button" href="{{ url_for('.login_with_google') }}">Click here log in with a Google account</a></p>
       <br>
