@@ -73,7 +73,6 @@ def check_auth(func):
 
 autocompleter = Autocompleter(phenos)
 @bp.route('/api/autocomplete')
-@check_auth
 def autocomplete():
     query = request.args.get('query', '')
     suggestions = autocompleter.autocomplete(query)
@@ -82,7 +81,6 @@ def autocomplete():
     return jsonify([])
 
 @bp.route('/go')
-@check_auth
 def go():
     query = request.args.get('query', None)
     if query is None:
@@ -93,7 +91,6 @@ def go():
     die("Couldn't find page for {!r}".format(query))
 
 @bp.route('/api/variant/<query>')
-@check_auth
 def api_variant(query:str):
     variant = get_variant(query)
     resp = jsonify(variant)
@@ -102,7 +99,6 @@ def api_variant(query:str):
     return resp
 
 @bp.route('/variant/<query>')
-@check_auth
 def variant_page(query:str):
     try:
         variant = get_variant(query)
@@ -116,16 +112,13 @@ def variant_page(query:str):
         die('Oh no, something went wrong', exc)
 
 @bp.route('/api/manhattan/pheno/<phenocode>.json')
-@check_auth
 def api_pheno(phenocode:str):
     return send_from_directory(get_filepath('manhattan'), '{}.json'.format(phenocode))
 
 @bp.route('/top_hits')
-@check_auth
 def top_hits_page():
     return render_template('top_hits.html')
 @bp.route('/api/top_hits.json')
-@check_auth
 def api_top_hits():
     return send_file(get_filepath('top-hits-1k'))
 @bp.route('/download/top_hits.tsv')
@@ -134,11 +127,9 @@ def download_top_hits():
     return send_file(get_filepath('top-hits-tsv'))
 
 @bp.route('/phenotypes')
-@check_auth
 def phenotypes_page():
     return render_template('phenotypes.html')
 @bp.route('/api/phenotypes.json')
-@check_auth
 def api_phenotypes():
     return send_file(get_filepath('phenotypes_summary'))
 @bp.route('/download/phenotypes.tsv')
@@ -147,13 +138,11 @@ def download_phenotypes():
     return send_file(get_filepath('phenotypes_summary_tsv'))
 
 @bp.route('/api/qq/pheno/<phenocode>.json')
-@check_auth
 def api_pheno_qq(phenocode:str):
     return send_from_directory(get_filepath('qq'), '{}.json'.format(phenocode))
 
 
 @bp.route('/random')
-@check_auth
 def random_page():
     url = get_random_page()
     if url is None:
@@ -161,7 +150,6 @@ def random_page():
     return redirect(url)
 
 @bp.route('/pheno/<phenocode>')
-@check_auth
 def pheno_page(phenocode:str):
     try:
         pheno = phenos[phenocode]
@@ -177,7 +165,6 @@ def pheno_page(phenocode:str):
 
 
 @bp.route('/region/<phenocode>/<region>')
-@check_auth
 def region_page(phenocode:str, region:str):
     try:
         pheno = phenos[phenocode]
@@ -191,7 +178,6 @@ def region_page(phenocode:str, region:str):
     )
 
 @bp.route('/api/region/<phenocode>/lz-results/') # This API is easier on the LZ side.
-@check_auth
 def api_region(phenocode:str):
     filter_param = request.args.get('filter')
     if not isinstance(filter_param, str): abort(404)
@@ -202,7 +188,6 @@ def api_region(phenocode:str):
 
 
 @bp.route('/api/pheno/<phenocode>/correlations/')
-@check_auth
 def api_pheno_correlations(phenocode:str):
     """Send information about phenotype correlations. This is an optional feature controlled by configuration."""
     if not conf.should_show_correlations():
@@ -243,7 +228,6 @@ def get_best_phenos_for_gene(gene:str) -> List[Dict[str,Any]]:
     return []
 
 @bp.route('/region/<phenocode>/gene/<genename>')
-@check_auth
 def gene_phenocode_page(phenocode:str, genename:str):
     try:
         gene_region_mapping = get_gene_region_mapping()
@@ -281,7 +265,6 @@ def gene_phenocode_page(phenocode:str, genename:str):
 
 
 @bp.route('/gene/<genename>')
-@check_auth
 def gene_page(genename:str):
     phenos_in_gene = get_best_phenos_for_gene(genename)
     if not phenos_in_gene:
@@ -335,6 +318,7 @@ if conf.is_secret_download_pheno_sumstats():
 else:
     app.config['DOWNLOAD_PHENO_SUMSTATS_BUTTON'] = True
     @bp.route('/download/<phenocode>')
+    @check_auth
     def download_pheno(phenocode:str):
         if phenocode not in phenos:
             die("Sorry, that phenocode doesn't exist")
