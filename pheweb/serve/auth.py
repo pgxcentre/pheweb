@@ -38,8 +38,8 @@ class GoogleSignIn(object):
         )
 
     def get_callback_url(self):
-        if "CALLBACK_URL" in conf.login:
-            return conf.login["CALLBACK_URL"]
+        if conf.get_login_google_id_and_secret()[3] is not None:
+            return conf.get_login_google_id_and_secret()[3]
         return url_for('.oauth_callback_google',
                         _external=True)
 
