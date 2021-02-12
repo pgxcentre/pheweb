@@ -176,7 +176,8 @@ def get_login_google_id_and_secret() -> Tuple[str,str]:
     if not overrides.get('login'): raise PheWebError("Missing login config")
     return (
         _get_config_str('login_GOOGLE_LOGIN_CLIENT_ID'),
-        _get_config_str('login_GOOGLE_LOGIN_CLIENT_SECRET')
+        _get_config_str('login_GOOGLE_LOGIN_CLIENT_SECRET'),
+        _get_config_str('login_CALLBACK_URL')
     )
 def get_login_allowlist() -> List[str]:
     key = 'login_allowlist'
