@@ -48,6 +48,8 @@ if conf.get_custom_templates_dir():
 
 phenos = {pheno['phenocode']: pheno for pheno in get_phenolist()}
 
+# Preventing downloads?
+PREVENT_DOWNLOADS = conf.get_prevent_downloads()
 
 def check_auth(func):
     """
@@ -117,6 +119,7 @@ def api_pheno(phenocode:str):
 
 @bp.route('/top_hits')
 def top_hits_page():
+    app.config['DOWNLOAD_TOP_HITS_BUTTON'] = not PREVENT_DOWNLOADS
     return render_template('top_hits.html')
 @bp.route('/api/top_hits.json')
 def api_top_hits():
@@ -124,6 +127,8 @@ def api_top_hits():
 @bp.route('/download/top_hits.tsv')
 @check_auth
 def download_top_hits():
+    if PREVENT_DOWNLOADS:
+        abort(403)
     return send_file(get_filepath('top-hits-tsv'))
 
 @bp.route('/phenotypes')
@@ -316,12 +321,14 @@ if conf.is_secret_download_pheno_sumstats():
         return ret, 200
 
 else:
-    app.config['DOWNLOAD_PHENO_SUMSTATS_BUTTON'] = True
+    app.config['DOWNLOAD_PHENO_SUMSTATS_BUTTON'] = not PREVENT_DOWNLOADS
     @bp.route('/download/<phenocode>')
     @check_auth
     def download_pheno(phenocode:str):
         if phenocode not in phenos:
             die("Sorry, that phenocode doesn't exist")
+        if PREVENT_DOWNLOADS:
+            abort(403)
         return send_from_directory(get_filepath('pheno_gz'), '{}.gz'.format(phenocode),
                                    as_attachment=True,
                                    attachment_filename='phenocode-{}.tsv.gz'.format(phenocode))
